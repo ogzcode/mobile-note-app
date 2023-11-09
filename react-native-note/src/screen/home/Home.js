@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
-import Header from './components/Header';
+import { View, Text, StyleSheet } from 'react-native';
 import NoteList from './components/NoteList';
 import NoteModal from './components/NoteModal';
+import { slate } from '../../style/color';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#fff"
+        backgroundColor: slate[200],
     }
 });
 
@@ -16,7 +16,6 @@ export default function Home() {
 
     return (
         <View style={styles.container}>
-            <Header />
             <NoteList onSelectItem={() => setNoteModalVisible(true)} />
             <NoteModal
                 visible={noteModalVisible}

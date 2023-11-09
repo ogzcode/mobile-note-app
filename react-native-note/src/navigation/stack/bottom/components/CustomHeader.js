@@ -8,6 +8,7 @@ import { radius } from '../../../../style/radius';
 import { spacing } from '../../../../style/spacing';
 import { fontWeight } from '../../../../style/fontWeight';
 import { fontSize } from '../../../../style/fontSize';
+import { shadow } from '../../../../style/shadow';
 
 
 const styles = StyleSheet.create({
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '90%',
         borderWidth: 1,
-        borderColor: slate[300],
+        borderColor: sky[300],
         borderRadius: radius['full'],
         alignItems: 'center',
         justifyContent: 'flex-start',

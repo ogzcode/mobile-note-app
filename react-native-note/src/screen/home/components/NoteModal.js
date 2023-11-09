@@ -1,61 +1,63 @@
 import React from 'react';
 import { View, Text, Modal, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import { red, sky, slate } from '../../../style/color';
+import { orange, red, sky, slate } from '../../../style/color';
 import { shadow } from '../../../style/shadow';
 import { radius } from '../../../style/radius';
+import { spacing } from '../../../style/spacing';
+
+import { ModalHeader } from './ModalHeader.js';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#fff"
-    },
-    modalHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: 16,
-        borderBottomWidth: 1,
-        borderBottomColor: slate[300],
-        boxShadow: shadow["default"],
-        elevation: 5,
-        zIndex: 1,
-        backgroundColor: sky[500],
+        backgroundColor: "#fff",
     },
     headerItem: {
         flexDirection: 'row',
         alignItems: 'center'
     },
     name: {
-        fontSize: 20,
-        fontWeight: 600,
+        fontSize: 24,
+        fontWeight: 500,
         color: slate[700],
-        marginLeft: 16,
-        color: "#fff"
+        textAlign: 'center',
+        marginBottom: 8,
+    },
+    time: {
+        fontSize: 12,
+        fontWeight: 400,
+        color: slate[400],
     },
     contentBox: {
-        padding: 24,
-        backgroundColor: "#fff",
+        padding: spacing[6],
+        backgroundColor: slate[50],
+    },
+    contentBoxHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 16,
     },
     contentText: {
         fontSize: 14,
         color: slate[600],
         lineHeight: 24,
-        letterSpacing: .8,
+        letterSpacing: .6,
         fontWeight: 400,
+        paddingHorizontal: 8,
     },
-    footerBtn: {
-        marginHorizontal: 8,
+    pinnedBtn: {
         width: 36,
         height: 36,
+        borderRadius: radius["full"],
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: radius["full"],
-        boxShadow: shadow["sm"],
-        backgroundColor: "#fff"
+        backgroundColor: "#fff",
+        borderColor: slate[300],
+        borderWidth: 1,
     }
 });
-
 
 export default function NoteModal({ visible, onClose }) {
     return (
@@ -66,23 +68,15 @@ export default function NoteModal({ visible, onClose }) {
             onRequestClose={onClose}
         >
             <View style={styles.container}>
-                <View style={styles.modalHeader}>
-                    <View style={styles.headerItem}>
-                        <Pressable onPress={onClose}>
-                            <AntDesign name="arrowleft" size={20} color={"white"} />
-                        </Pressable>
-                        <Text style={styles.name}>Note Name</Text>
-                    </View>
-                    <View style={styles.headerItem}>
-                        <Pressable style={[styles.footerBtn, styles.editBtn]} onPress={() => console.log('edit')}>
-                            <AntDesign name="edit" size={20} color={sky[500]} />
-                        </Pressable>
-                        <Pressable style={[styles.footerBtn, styles.deleteBtn]}>
-                            <AntDesign name="delete" size={20} color={red[500]} />
-                        </Pressable>
-                    </View>
-                </View>
+                <ModalHeader onClose={onClose} />
                 <ScrollView style={styles.contentBox}>
+                    <View style={styles.contentBoxHeader}>
+                        <Text style={styles.time}>01.11.2023</Text>
+                        <Pressable style={styles.pinnedBtn}>
+                            <AntDesign name="pushpino" size={18} color={slate[500]} />
+                        </Pressable>
+                    </View>
+                    <Text style={styles.name}>Note Name</Text>
                     <Text style={styles.contentText}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eleifend metus sed tortor
                         finibus sollicitudin dignissim eget quam.Lorem ipsum dolor sit amet, consectetur adipiscing elit.

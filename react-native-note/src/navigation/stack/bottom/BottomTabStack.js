@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import Home from "../../../screen/home/Home";
-import AddNote from "../../../screen/AddNote";
+import AddNote from "../../../screen/addNote/AddNote";
 import Settings from "../../../screen/Settings";
 
 

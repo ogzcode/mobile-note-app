@@ -25,3 +25,11 @@ class UserServices:
         User.query.filter_by(email=email).delete()
         db.session.commit()
 
+    @staticmethod
+    def update_user(oldEmail, newEmail, password):
+        user = User.query.filter_by(email=oldEmail).first()
+        user.email = newEmail
+        user.set_password(password)
+        db.session.commit()
+        return user
+

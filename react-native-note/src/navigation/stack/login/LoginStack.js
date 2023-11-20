@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useSelector } from 'react-redux';
 
 import Welcome from '../../../screen/login/Welcome';
 import Email from '../../../screen/login/Email';
@@ -8,11 +9,15 @@ import Pin from '../../../screen/login/Pin';
 const Stack = createStackNavigator();
 
 export default function LoginStack() {
+    const { firstLogin } = useSelector(state => state.auth);
+
     return (
-        <Stack.Navigator screenOptions={{
-            gestureEnabled: true,
-            headerShown: false
-        }}>
+        <Stack.Navigator
+            initialRouteName={firstLogin ? "Pin" : "Welcome"}
+            screenOptions={{
+                gestureEnabled: true,
+                headerShown: false
+            }}>
             <Stack.Screen name="Welcome" component={Welcome} />
             <Stack.Screen name="Email" component={Email} />
             <Stack.Screen name="Pin" component={Pin} />

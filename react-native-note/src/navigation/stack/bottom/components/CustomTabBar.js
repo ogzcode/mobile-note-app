@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
         height: size["16"],
         borderTopColor: slate[200],
         borderTopWidth: 1,
+        backgroundColor: "#fff"
     },
     tabBarItem: {
         flex: 1,

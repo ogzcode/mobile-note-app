@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import Home from "../../../screen/home/Home";
 import AddNote from "../../../screen/addNote/AddNote";
-import Settings from "../../../screen/Settings";
+import Settings from "../../../screen/settings/Settings";
 
 
 import { CustomHeader } from "./components/CustomHeader";
@@ -31,6 +31,7 @@ export default function BottomTabStack() {
             <Tab.Screen name="Settings" component={Settings}
                 options={{
                     tabBarLabel: '',
+                    headerShown: false,
                 }}
             />
         </Tab.Navigator>

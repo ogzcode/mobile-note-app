@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-import { slate } from '../../style/color';
+import { gray, slate } from '../../style/color';
 import { spacing } from '../../style/spacing';
-import { radius } from '../../style/radius';
 
-import { TitleInput } from './components/TitleInput';
 import { Header } from './components/Header';
-import { shadow } from '../../style/shadow';
+
+import { getTodayDate } from '../../utils/util';
+
+import { addNote, clearStatus } from '../../store/slice/noteSlice';
+import { useToast } from '../../components/toast/useToast';
 
 const styles = StyleSheet.create({
     container: {
@@ -16,38 +20,95 @@ const styles = StyleSheet.create({
     },
     inputBox: {
         flex: 1,
-        padding: spacing[6],
-        backgroundColor: slate[200],
+        padding: spacing[4],
+    },
+    noteHeader: {
+        fontSize: 20,
+        fontWeight: 400,
+        color: slate[700],
+        outlineWidth: 0,
+        marginBottom: spacing[2],
+        paddingBottom: spacing[1],
+    },
+    subInfo: {
+        flexDirection: 'row',
+        marginBottom: spacing[4],
+        alignItems: 'center',
+        gap: spacing[2],
     },
     time: {
-        color: slate[600],
-        fontSize: 14,
+        color: slate[500],
+        fontSize: 12,
         fontWeight: 400,
-        marginBottom: spacing[4]
     },
     noteContent: {
         flex: 1,
         outlineWidth: 0,
-        color: slate[500],
+        color: slate[600],
         fontSize: 16,
         fontWeight: 400,
         backgroundColor: "#fff",
-        padding: spacing[2],
-        borderRadius: radius["default"],
-        marginTop: spacing[4],
-        boxShadow: shadow["default"],
     }
 });
 
 
 export default function AddNote() {
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+    const { status } = useSelector(state => state.note);
+
+    const navigation = useNavigation();
+    const { showToast } = useToast();
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (status === 'success') {
+            showToast('Note added successfully', 'success');
+            navigation.navigate("Home");
+            dispatch(clearStatus());
+        }
+    }, [status]);
+
+
+
+    const getCountChars = () => {
+        return content.length + title.length;
+    }
+
+    const handleSubmit = async () => {
+        await dispatch(addNote({
+            title,
+            content
+        }));
+        setTitle('');
+        setContent('');
+    }
+
     return (
         <View style={styles.container}>
-            <Header />
+            <Header onSubmit={handleSubmit} />
             <View style={styles.inputBox}>
-                <Text style={styles.time}>20.12.2022</Text>
-                <TitleInput />
-                <TextInput style={styles.noteContent} multiline={true} placeholderTextColor={slate[300]} />
+                <TextInput
+                    value={title}
+                    onChangeText={setTitle}
+                    style={[styles.noteHeader]}
+                    placeholder='Title'
+                    placeholderTextColor={gray[400]}
+                />
+                <View style={styles.subInfo}>
+                    <Text style={styles.time}>{getTodayDate()}</Text>
+                    <Text style={{ color: slate[600] }}>|</Text>
+                    <Text style={styles.time}>{getCountChars()} words</Text>
+                </View>
+                <TextInput
+                    value={content}
+                    onChangeText={setContent}
+                    style={styles.noteContent}
+                    multiline={true}
+                    placeholder='Start writing'
+                    placeholderTextColor={gray[400]}
+                />
             </View>
         </View>
     );

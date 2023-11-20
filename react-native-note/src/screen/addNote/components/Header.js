@@ -14,8 +14,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: "#fff",
-        paddingVertical: spacing[4],
+        height: 64,
         paddingHorizontal: spacing[6],
+        borderBottomWidth: 1,
+        borderBottomColor: slate[200],
     },
     headerTitle: {
         fontSize: 18,
@@ -34,11 +36,11 @@ const styles = StyleSheet.create({
 });
 
 
-export const Header = () => {
+export const Header = ({ onSubmit }) => {
     return (
         <View style={styles.header}>
             <Text style={styles.headerTitle}>Add Note</Text>
-            <Pressable style={styles.uploadBtn}>
+            <Pressable onPress={() => onSubmit()} style={styles.uploadBtn}>
                 <AntDesign name="upload" size={20} color={slate[700]} />
             </Pressable>
         </View>

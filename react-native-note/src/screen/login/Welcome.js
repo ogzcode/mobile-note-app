@@ -1,51 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Pressable, Animated, Easing } from 'react-native';
-import WelcomeSVG from '../../assets/SvgComponent/WelcomeSVG';
+import { View, Text, Pressable, Animated, Easing } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-import { sky } from '../../style/color';
+import WelcomeSVG from '../../assets/SvgComponent/WelcomeSVG';
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#ffffff'
-    },
-    contentBox: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: 20,
-        marginTop: 24,
-    },
-    text: {
-        fontSize: 32,
-        fontWeight: 'bold',
-        color: '#262626'
-    },
-    content: {
-        fontSize: 16,
-        textAlign: 'center',
-        marginTop: 8,
-        paddingHorizontal: 20,
-        color: '#737373'
-    },
-    loginBtnText: {
-        fontSize: 16,
-        fontWeight: 600,
-        color: '#ffffff',
-    },
-    loginBtn: {
-        marginTop: 24,
-        backgroundColor: sky[500],
-        borderRadius: 6,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: 16,
-        paddingVertical: 8,
-    },
-});
+import { BaseStyle} from './style/BaseStyle';
 
 export default function Welcome({ navigation }) {
     const animatedValue = useRef(new Animated.Value(0)).current;
@@ -74,15 +33,15 @@ export default function Welcome({ navigation }) {
     });
 
     return (
-        <View style={styles.container}>
+        <View style={BaseStyle.container}>
             <WelcomeSVG width={400} height={300} />
-            <View style={styles.contentBox}>
-                <Text style={styles.text}>Welcome</Text>
-                <Text style={styles.content}>
+            <View style={BaseStyle.contentBox}>
+                <Text style={BaseStyle.text}>Welcome</Text>
+                <Text style={BaseStyle.content}>
                     Welcome to our application. We are here to give you a great experience.
                 </Text>
-                <Pressable onPress={() => navigation.navigate('Email')} style={[styles.loginBtn, marginLeft]}>
-                    <Text style={styles.loginBtnText}>Go to Login</Text>
+                <Pressable onPress={() => navigation.navigate('Email')} style={[BaseStyle.loginBtn, marginLeft]}>
+                    <Text style={BaseStyle.loginBtnText}>Go to Login</Text>
                     <Animated.View style={{ marginLeft: 6, marginTop: 4, transform: [{ translateX: marginLeft }] }}>
                         <AntDesign name="arrowright" size={16} color="white" />
                     </Animated.View>

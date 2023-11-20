@@ -9,5 +9,13 @@ export const register = (data) => {
 }
 
 export const deleteAccount = () => {
-    return request.delete("/user");
+    return request.delete("/user/deleteUser");
+}
+
+export const getUserInfo = () => {
+    return request.get("/user/getUserByEmail");
+}
+
+export const updateUser = (data) => {
+    return request.put("/user/updateUser", data);
 }

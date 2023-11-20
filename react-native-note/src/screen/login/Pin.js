@@ -1,88 +1,86 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Pressable} from 'react-native';
-import Password from "../../assets/SvgComponent/PasswordSVG";
-import { TextInput } from 'react-native-gesture-handler';
-import { sky } from '../../style/color';
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { View, Text, Pressable, TextInput } from 'react-native';
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#ffffff'
-    },
-    contentBox: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: 20,
-        marginTop: 24,
-    },
-    text: {
-        fontSize: 32,
-        fontWeight: 'bold',
-        color: '#262626'
-    },
-    content: {
-        fontSize: 14,
-        textAlign: 'center',
-        marginTop: 8,
-        paddingHorizontal: 20,
-        color: '#737373'
-    },
-    pinInput: {
-        marginTop: 24,
-        width: 300,
-        height: 40,
-        borderWidth: 1,
-        borderColor: sky[500],
-        borderRadius: 6,
-        paddingHorizontal: 16,
-        paddingVertical: 8,
-        outlineWidth: 0,
-        color: '#525252',
-        letterSpacing: 16,
-        fontSize: 16,
-    },
-    loginBtnText: {
-        fontSize: 16,
-        fontWeight: 600,
-        color: '#ffffff',
-    },
-    loginBtn: {
-        marginTop: 24,
-        backgroundColor: sky[500],
-        borderRadius: 6,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: 16,
-        paddingVertical: 8,
-    },
-    disabled: {
-        opacity: 0.5,
-    }
-});
+import Password from "../../assets/SvgComponent/PasswordSVG";
+
+import { loginAsync, registerAsync, clearStatus, clearError } from '../../store/slice/authSlice';
+import { useToast } from '../../components/toast/useToast';
+
+import { BaseStyle, InputStyle } from './style/BaseStyle';
 
 export default function Pin({ navigation }) {
+    const { firstLogin, userEmail, isLoading, error, status } = useSelector(state => state.auth);
+    const { showToast } = useToast();
+
     const [pin, setPin] = useState('');
 
+    const dispatch = useDispatch();
+
+    const navigateTimeout = () => {
+        let timer = setTimeout(() => {
+            navigation.navigate("BottomTabStack");
+        }, 1500);
+
+        dispatch(clearStatus());
+
+        return () => {
+            clearTimeout(timer);
+        }
+    }
+
+    useEffect(() => {
+        if (status === "success") {
+            showToast("Login success", "success");
+            navigateTimeout();
+        }
+    }, [status]);
+
+    useEffect(() => {
+        if (error) {
+            showToast(error, "error");
+            dispatch(clearError());
+        }
+    }, [error]);
+
+    const handleSubmit = async () => {
+        if (!firstLogin) {
+            await dispatch(registerAsync({
+                email: userEmail,
+                pin: pin
+            }));
+        } else {
+            await dispatch(loginAsync({
+                email: userEmail,
+                pin: pin
+            }));
+        }
+    }
+
+    const isDisabled = () => {
+        if (pin.length < 4) {
+            return true;
+        }
+        return false;
+    }
+
     return (
-        <View style={styles.container}>
+        <View style={BaseStyle.container}>
             <Password width={300} height={200} />
-            <View style={styles.contentBox}>
-                <Text style={styles.text}>Enter your PIN</Text>
-                <Text style={styles.content}>
+            <View style={BaseStyle.contentBox}>
+                <Text style={BaseStyle.text}>Enter your PIN</Text>
+                <Text style={BaseStyle.content}>
                     We need a PIN for the security of your data.
                 </Text>
                 <TextInput
-                    style={[styles.pinInput, { textAlign: 'center'}]}
+                    style={[InputStyle.input, InputStyle.pinInput, { textAlign: 'center' }]}
                     onChangeText={setPin}
                     value={pin}
                     inputMode='numeric'
                     maxLength={4}
                 />
-                <Pressable onPress={() => navigation.navigate("BottomTabStack")} style={[styles.loginBtn]}>
-                    <Text style={styles.loginBtnText}>Finish</Text>
+                <Pressable onPress={() => handleSubmit()} style={[BaseStyle.loginBtn, isDisabled() && BaseStyle.disabled]} disabled={isDisabled()}>
+                    <Text style={BaseStyle.loginBtnText}>Finish</Text>
                 </Pressable>
             </View>
         </View>

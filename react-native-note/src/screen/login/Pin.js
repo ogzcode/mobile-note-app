@@ -32,7 +32,11 @@ export default function Pin({ navigation }) {
     useEffect(() => {
         if (status === "success") {
             showToast("Login success", "success");
-            navigateTimeout();
+            const cleanUp = navigateTimeout();
+
+            return () => {
+                cleanUp();
+            }
         }
     }, [status]);
 

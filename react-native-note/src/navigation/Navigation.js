@@ -18,7 +18,7 @@ import { setFirstLogin, setEmail, setAuth } from "../store/slice/authSlice";
 const Stack = createStackNavigator();
 
 export default function Navigation() {
-    const { isAuth, userEmail, firstLogin } = useSelector(state => state.auth);
+    const { isAuth } = useSelector(state => state.auth);
 
     const dispatch = useDispatch();
 

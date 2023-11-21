@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Text, Modal, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { useSelector } from 'react-redux';
+
 import { AntDesign } from '@expo/vector-icons';
-import { orange, red, sky, slate } from '../../../style/color';
-import { shadow } from '../../../style/shadow';
+import { slate, yellow } from '../../../style/color';
 import { radius } from '../../../style/radius';
 import { spacing } from '../../../style/spacing';
 
@@ -53,13 +54,32 @@ const styles = StyleSheet.create({
         borderRadius: radius["full"],
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: "#fff",
-        borderColor: slate[300],
         borderWidth: 1,
+    },
+    activePin: {
+        borderColor: yellow[500],
+        backgroundColor: yellow[500],
+    },
+    deactivePin: {
+        borderColor: slate[500],
+        backgroundColor: slate[50],
     }
 });
 
 export default function NoteModal({ visible, onClose }) {
+    const { selectedNote } = useSelector(state => state.note);
+
+    if (!visible || !selectedNote) return null;
+
+    const getDate = (date) => {
+        const d = new Date(date);
+        const day = d.getDate();
+        const month = d.getMonth() + 1;
+        const year = d.getFullYear();
+
+        return `${day}.${month}.${year}`;
+    }
+
     return (
         <Modal
             animationType='slide'
@@ -71,55 +91,14 @@ export default function NoteModal({ visible, onClose }) {
                 <ModalHeader onClose={onClose} />
                 <ScrollView style={styles.contentBox}>
                     <View style={styles.contentBoxHeader}>
-                        <Text style={styles.time}>01.11.2023</Text>
-                        <Pressable style={styles.pinnedBtn}>
-                            <AntDesign name="pushpino" size={18} color={slate[500]} />
+                        <Text style={styles.time}>{getDate(selectedNote.createdAt)}</Text>
+                        <Pressable style={[styles.pinnedBtn, !selectedNote?.isPinned ? styles.activePin : styles.deactivePin ]}>
+                            <AntDesign name="pushpino" size={18} color={!selectedNote?.isPinned ? "#fff" : slate[500]} />
                         </Pressable>
                     </View>
-                    <Text style={styles.name}>Note Name</Text>
+                    <Text style={styles.name}>{ selectedNote?.title }</Text>
                     <Text style={styles.contentText}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eleifend metus sed tortor
-                        finibus sollicitudin dignissim eget quam.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Curabitur eleifend metus sed tortor finibus sollicitudin dignissim eget quam.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eleifend metus sed tortor
-                        finibus sollicitudin dignissim eget quam.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Curabitur eleifend metus sed tortor finibus sollicitudin dignissim eget quam.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eleifend metus sed tortor
-                        finibus sollicitudin dignissim eget quam.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Curabitur eleifend metus sed tortor finibus sollicitudin dignissim eget quam.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eleifend metus sed tortor
-                        finibus sollicitudin dignissim eget quam.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Curabitur eleifend metus sed tortor finibus sollicitudin dignissim eget quam.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eleifend metus sed tortor
-                        finibus sollicitudin dignissim eget quam.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Curabitur eleifend metus sed tortor finibus sollicitudin dignissim eget quam.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eleifend metus sed tortor
-                        finibus sollicitudin dignissim eget quam.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Curabitur eleifend metus sed tortor finibus sollicitudin dignissim eget quam.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eleifend metus sed tortor
-                        finibus sollicitudin dignissim eget quam.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Curabitur eleifend metus sed tortor finibus sollicitudin dignissim eget quam.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eleifend metus sed tortor
-                        finibus sollicitudin dignissim eget quam.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Curabitur eleifend metus sed tortor finibus sollicitudin dignissim eget quam.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eleifend metus sed tortor
-                        finibus sollicitudin dignissim eget quam.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Curabitur eleifend metus sed tortor finibus sollicitudin dignissim eget quam.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eleifend metus sed tortor
-                        finibus sollicitudin dignissim eget quam.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Curabitur eleifend metus sed tortor finibus sollicitudin dignissim eget quam.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eleifend metus sed tortor
-                        finibus sollicitudin dignissim eget quam.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Curabitur eleifend metus sed tortor finibus sollicitudin dignissim eget quam.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eleifend metus sed tortor
-                        finibus sollicitudin dignissim eget quam.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Curabitur eleifend metus sed tortor finibus sollicitudin dignissim eget quam.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eleifend metus sed tortor
-                        finibus sollicitudin dignissim eget quam.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Curabitur eleifend metus sed tortor finibus sollicitudin dignissim eget quam.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eleifend metus sed tortor
-                        finibus sollicitudin dignissim eget quam.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Curabitur eleifend metus sed tortor finibus sollicitudin dignissim eget quam.
+                        { selectedNote?.content }
                     </Text>
                 </ScrollView>
             </View>

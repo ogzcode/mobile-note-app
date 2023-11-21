@@ -1,18 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import NoteList from './components/NoteList';
 import NoteModal from './components/NoteModal';
-import { slate } from '../../style/color';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchNotes } from '../../store/slice/noteSlice';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: slate[200],
     }
 });
 
 export default function Home() {
     const [noteModalVisible, setNoteModalVisible] = useState(false);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchNotes());
+    }, []);
 
     return (
         <View style={styles.container}>

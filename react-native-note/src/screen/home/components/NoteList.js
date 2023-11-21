@@ -1,6 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 
+import { useSelector, useDispatch } from 'react-redux';
+
+import { setSelectedNoteAction } from '../../../store/slice/noteSlice';
+
 import { spacing } from '../../../style/spacing';
 import { fontSize } from '../../../style/fontSize';
 import { radius } from '../../../style/radius';
@@ -13,6 +17,7 @@ const styles = StyleSheet.create({
     noteContainer: {
         backgroundColor: slate[100],
         position: 'relative',
+        paddingBottom: spacing['6'],
     },
     noteItem: {
         marginHorizontal: spacing['6'],
@@ -56,7 +61,7 @@ const styles = StyleSheet.create({
     dateText: {
         fontSize: fontSize['xs'],
         color: slate[500],
-        fontWeight: fontWeight['normal'],
+        fontWeight: fontWeight['medium'],
         textTransform: 'uppercase',
     },
     leftBar: {
@@ -70,23 +75,41 @@ const styles = StyleSheet.create({
     }
 });
 
-const text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eleifend metus sed tortor finibus sollicitudin dignissim eget quam.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eleifend metus sed tortor finibus sollicitudin dignissim eget quam.";
 
 export default function NoteList({ onSelectItem }) {
+    const { notes } = useSelector(state => state.note);
+
+    const dispatch = useDispatch();
+
+    const getDay = (date, pos) => {
+        const dateCopy = date.split(' ')
+
+        if (pos === 'day') {
+            return dateCopy[1];
+        }
+        
+        return dateCopy[2];
+    }
+
+    const handleSelect = (note) => {
+        dispatch(setSelectedNoteAction(note));
+        onSelectItem();
+    }
+
     return (
         <ScrollView style={styles.noteContainer}>
             {
-                [...Array(10)].map((item, index) => (
-                    <Pressable onPress={() => onSelectItem()} style={styles.noteItem} key={index}>
+                notes?.map((item, index) => (
+                    <Pressable onPress={() => handleSelect(item)} style={styles.noteItem} key={index}>
                         <View style={styles.itemHeader}>
                             <View style={styles.headerDate}>
-                                <Text style={styles.dateText}>25</Text>
-                                <Text style={styles.dateText}>Jan</Text>
+                                <Text style={styles.dateText}>{ getDay(item.createdAt, "day") }</Text>
+                                <Text style={styles.dateText}>{ getDay(item.createdAt)}</Text>
                             </View>
-                            <Text style={styles.noteName}>Note Name</Text>
+                            <Text style={styles.noteName}>{item.title}</Text>
                         </View>
                         <Text style={styles.noteContent}>
-                            {text.substring(0, 85)}...
+                            {item.content.substring(0, 100)}...
                         </Text>
                         <View style={styles.leftBar}></View>
                     </Pressable>

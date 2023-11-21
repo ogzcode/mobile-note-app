@@ -1,11 +1,14 @@
 import React from 'react';
 import { View, Pressable, StyleSheet } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { AntDesign } from '@expo/vector-icons';
 
 import { red, slate } from '../../../style/color';
 import { radius } from '../../../style/radius';
 import { spacing } from '../../../style/spacing';
+
+import { removeNote, setSelectedNoteAction } from '../../../store/slice/noteSlice';
 
 
 const styles = StyleSheet.create({
@@ -40,12 +43,25 @@ const styles = StyleSheet.create({
 });
 
 export const ModalHeader = ({ onClose }) => {
+    const { selectedNote } = useSelector(state => state.note);
+    const dispatch = useDispatch();
+
+    const handleClose = () => {
+        onClose();
+        dispatch(setSelectedNoteAction(null));
+    }
+
+    const handleDelete = async () => {
+        await dispatch(removeNote(selectedNote.id));
+        onClose();
+        dispatch(setSelectedNoteAction(null));
+    }
     return (
         <View style={styles.modalHeader}>
-            <Pressable onPress={() => onClose()} style={styles.backBtn}>
+            <Pressable onPress={() => handleClose()} style={styles.backBtn}>
                 <AntDesign name="left" size={18} color={slate[500]} />
             </Pressable>
-            <Pressable style={styles.deleteBtn}>
+            <Pressable onPress={() => handleDelete()} style={styles.deleteBtn}>
                 <AntDesign name="delete" size={18} color={red[500]} />
             </Pressable>
         </View>

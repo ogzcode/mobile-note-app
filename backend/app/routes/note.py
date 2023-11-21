@@ -15,6 +15,16 @@ def all_notes():
         "notes": [note.to_dict() for note in notes]
     }), 200
 
+@note.route('/userNotes', methods=['GET'])
+@token_required
+def user_notes():
+    user = UserServices.get_user(g.email)
+    notes = NoteServices.get_notes(user.id)
+    return jsonify({
+        "message": "User notes",
+        "notes": [note.to_dict() for note in notes]
+    }), 200
+
 
 @note.route('/<id>', methods=['GET'])
 @token_required
@@ -27,7 +37,7 @@ def get_by_id(id):
     }), 200
 
 
-@note.route('/', methods=['POST'])
+@note.route('/createNote', methods=['POST'])
 @token_required
 def create():
     data = request.get_json()
@@ -44,13 +54,13 @@ def create():
         "note": note.to_dict()
     }), 200
 
-@note.route('/<id>', methods=['PUT'])
+@note.route('/updateNote', methods=['PUT'])
 @token_required
-def update(id):
+def update():
     data = request.get_json()
 
     note = NoteServices.update_note_by_id(
-        id,
+        data['id'],
         data['title'],
         data['content']
     )
@@ -61,7 +71,7 @@ def update(id):
     }), 200
 
 
-@note.route('/<id>', methods=['DELETE'])
+@note.route('/deleteNote/<id>', methods=['DELETE'])
 @token_required
 def delete(id):
     note = NoteServices.delete_note_by_id(id)
@@ -72,7 +82,7 @@ def delete(id):
     }), 200
 
 
-@note.route('/<id>/pin', methods=['PUT'])
+@note.route('/pin/<id>', methods=['PUT'])
 @token_required
 def pin(id):
     note = NoteServices.pin_note_by_id(id)
@@ -81,7 +91,7 @@ def pin(id):
         "note": note.to_dict()
     }), 200
 
-@note.route('/<id>/unpin', methods=['PUT'])
+@note.route('/unPin/<id>', methods=['PUT'])
 @token_required
 def unpin(id):
     note = NoteServices.unpin_note_by_id(id)

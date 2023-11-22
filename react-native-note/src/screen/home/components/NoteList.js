@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
-
 import { useSelector, useDispatch } from 'react-redux';
+
+import { AntDesign } from '@expo/vector-icons';
 
 import { setSelectedNoteAction } from '../../../store/slice/noteSlice';
 
 import { spacing } from '../../../style/spacing';
 import { fontSize } from '../../../style/fontSize';
 import { radius } from '../../../style/radius';
-import { sky, slate } from '../../../style/color';
+import { sky, slate, yellow } from '../../../style/color';
 import { fontWeight } from '../../../style/fontWeight';
 import { size } from '../../../style/size';
 import { shadow } from '../../../style/shadow';
+
+import { getSplitDay } from '../../../utils/util';
 
 const styles = StyleSheet.create({
     noteContainer: {
@@ -72,41 +75,56 @@ const styles = StyleSheet.create({
         width: size['1'],
         backgroundColor: sky[500],
         borderRadius: radius['full'],
+    },
+    pinIconBox: {
+        marginLeft: 'auto',
+        width: spacing['8'],
+        height: spacing['8'],
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: yellow[500],
+        borderRadius: radius['full'],
     }
 });
 
 
 export default function NoteList({ onSelectItem }) {
-    const { notes } = useSelector(state => state.note);
+    const { notes, searchQuery } = useSelector(state => state.note);
 
     const dispatch = useDispatch();
-
-    const getDay = (date, pos) => {
-        const dateCopy = date.split(' ')
-
-        if (pos === 'day') {
-            return dateCopy[1];
-        }
-        
-        return dateCopy[2];
-    }
 
     const handleSelect = (note) => {
         dispatch(setSelectedNoteAction(note));
         onSelectItem();
     }
 
+    const filterNotes = useMemo(() => {
+        const copy = searchQuery === '' ? notes : notes.filter(note => note.title.toLowerCase().includes(searchQuery.toLowerCase()));
+
+        const sorted = [...copy].sort((a, b) => {
+            if (a.isPinned && !b.isPinned) return -1;
+            if (!a.isPinned && b.isPinned) return 1;
+            return 0;
+        })
+
+        return sorted
+    }, [searchQuery, notes]);
+
     return (
         <ScrollView style={styles.noteContainer}>
             {
-                notes?.map((item, index) => (
+                filterNotes?.map((item, index) => (
                     <Pressable onPress={() => handleSelect(item)} style={styles.noteItem} key={index}>
                         <View style={styles.itemHeader}>
                             <View style={styles.headerDate}>
-                                <Text style={styles.dateText}>{ getDay(item.createdAt, "day") }</Text>
-                                <Text style={styles.dateText}>{ getDay(item.createdAt)}</Text>
+                                <Text style={styles.dateText}>{getSplitDay(item.createdAt, "day")}</Text>
+                                <Text style={styles.dateText}>{getSplitDay(item.createdAt)}</Text>
                             </View>
                             <Text style={styles.noteName}>{item.title}</Text>
+                            {item.isPinned && <View style={styles.pinIconBox}>
+                                <AntDesign name="pushpino" size={16} color={item.isPinned && yellow[500]} />
+                            </View>}
                         </View>
                         <Text style={styles.noteContent}>
                             {item.content.substring(0, 100)}...

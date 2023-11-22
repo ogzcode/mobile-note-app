@@ -24,7 +24,8 @@ export const updateNoteAsync = createAsyncThunk("notes/updateNote", async (data)
     const response = await updateNote({
         id: data.id,
         title: data.title,
-        content: data.content
+        content: data.content,
+        isPinned: data.isPinned
     });
     return response.data;
 });
@@ -35,7 +36,8 @@ const noteSlice = createSlice({
         notes: [],
         status: null,
         error: null,
-        selectedNote: null
+        selectedNote: null,
+        searchQuery: '',
     },
     reducers: {
         clearStatus: (state) => {
@@ -43,6 +45,9 @@ const noteSlice = createSlice({
         },
         setSelectedNoteAction: (state, action) => {
             state.selectedNote = action.payload;
+        },
+        searchNoteAction: (state, action) => {
+            state.searchQuery = action.payload;
         }
     },
     extraReducers(builder) {
@@ -80,13 +85,13 @@ const noteSlice = createSlice({
                 state.status = "loading";
             })
             .addCase(updateNoteAsync.fulfilled, (state, action) => {
-                state.status = "success";
                 state.notes = state.notes.map(note => {
-                    if (note._id === action.payload._id) {
-                        return action.payload;
+                    if (note.id === action.payload.note.id) {
+                        return action.payload.note;
                     }
                     return note;
                 });
+                state.selectedNote = action.payload.note;
             })
             .addCase(updateNoteAsync.rejected, (state) => {
                 state.status = "failed";
@@ -94,6 +99,6 @@ const noteSlice = createSlice({
     }
 });
 
-export const { clearStatus, setSelectedNoteAction } = noteSlice.actions;
+export const { clearStatus, setSelectedNoteAction, searchNoteAction } = noteSlice.actions;
 
 export default noteSlice.reducer;

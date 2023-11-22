@@ -1,6 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import { useDispatch } from 'react-redux';
+
+import { searchNoteAction } from '../../../../store/slice/noteSlice';
 
 import { size } from '../../../../style/size';
 import { sky, slate } from '../../../../style/color';
@@ -8,7 +11,6 @@ import { radius } from '../../../../style/radius';
 import { spacing } from '../../../../style/spacing';
 import { fontWeight } from '../../../../style/fontWeight';
 import { fontSize } from '../../../../style/fontSize';
-import { shadow } from '../../../../style/shadow';
 
 
 const styles = StyleSheet.create({
@@ -52,11 +54,20 @@ const styles = StyleSheet.create({
 });
 
 const HomeHeader = () => {
+    const [searchQuery, setSearchQuery] = React.useState('');
+
+    const dispatch = useDispatch();
+
+    const handleChangeSearch = (query) => {
+        setSearchQuery(query);
+        dispatch(searchNoteAction(query));
+    };
+
     return (
         <View style={[styles.headerContainer, styles.homeHeader]}>
             <View style={styles.searchBox}>
                 <AntDesign name="search1" size={size['5']} color={sky[500]} style={{ marginRight: spacing[2] }} />
-                <TextInput placeholder="Search" placeholderTextColor={slate[500]} style={styles.searchInput} />
+                <TextInput value={searchQuery} onChangeText={handleChangeSearch} placeholder="Search" placeholderTextColor={slate[500]} style={styles.searchInput} />
             </View>
         </View>
     );

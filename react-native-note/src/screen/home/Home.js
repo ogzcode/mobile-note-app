@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import NoteList from './components/NoteList';
 import NoteModal from './components/NoteModal';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { fetchNotes } from '../../store/slice/noteSlice';
 
 const styles = StyleSheet.create({

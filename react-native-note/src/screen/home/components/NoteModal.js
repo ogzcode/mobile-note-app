@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Modal, StyleSheet, Pressable, ScrollView } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { AntDesign } from '@expo/vector-icons';
 import { slate, yellow } from '../../../style/color';
@@ -8,6 +8,9 @@ import { radius } from '../../../style/radius';
 import { spacing } from '../../../style/spacing';
 
 import { ModalHeader } from './ModalHeader.js';
+
+import { updateNoteAsync } from '../../../store/slice/noteSlice.js';
+import { getDateToDot } from '../../../utils/util.js';
 
 const styles = StyleSheet.create({
     container: {
@@ -69,15 +72,12 @@ const styles = StyleSheet.create({
 export default function NoteModal({ visible, onClose }) {
     const { selectedNote } = useSelector(state => state.note);
 
+    const dispatch = useDispatch();
+
     if (!visible || !selectedNote) return null;
 
-    const getDate = (date) => {
-        const d = new Date(date);
-        const day = d.getDate();
-        const month = d.getMonth() + 1;
-        const year = d.getFullYear();
-
-        return `${day}.${month}.${year}`;
+    const handlePin = async () => {
+        await dispatch(updateNoteAsync({ ...selectedNote, isPinned: !selectedNote.isPinned }));
     }
 
     return (
@@ -91,9 +91,9 @@ export default function NoteModal({ visible, onClose }) {
                 <ModalHeader onClose={onClose} />
                 <ScrollView style={styles.contentBox}>
                     <View style={styles.contentBoxHeader}>
-                        <Text style={styles.time}>{getDate(selectedNote.createdAt)}</Text>
-                        <Pressable style={[styles.pinnedBtn, !selectedNote?.isPinned ? styles.activePin : styles.deactivePin ]}>
-                            <AntDesign name="pushpino" size={18} color={!selectedNote?.isPinned ? "#fff" : slate[500]} />
+                        <Text style={styles.time}>{getDateToDot(selectedNote.createdAt)}</Text>
+                        <Pressable onPress={() => handlePin()} style={[styles.pinnedBtn, selectedNote?.isPinned ? styles.activePin : styles.deactivePin ]}>
+                            <AntDesign name="pushpino" size={18} color={selectedNote?.isPinned ? "#fff" : slate[500]} />
                         </Pressable>
                     </View>
                     <Text style={styles.name}>{ selectedNote?.title }</Text>

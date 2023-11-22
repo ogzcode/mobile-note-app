@@ -41,8 +41,7 @@ def update_user():
 
     if "email" not in data or "pin" not in data:
         return jsonify({'message': 'Invalid credentials'}), 422
-    
-    print(g.email, data["email"], data["pin"])
+
 
     user = UserServices.update_user(data["oldEmail"], data['email'], data['pin'])
 

@@ -62,7 +62,8 @@ def update():
     note = NoteServices.update_note_by_id(
         data['id'],
         data['title'],
-        data['content']
+        data['content'],
+        data['isPinned']
     )
 
     return jsonify({
@@ -81,24 +82,6 @@ def delete(id):
         "note": note.to_dict()
     }), 200
 
-
-@note.route('/pin/<id>', methods=['PUT'])
-@token_required
-def pin(id):
-    note = NoteServices.pin_note_by_id(id)
-    return jsonify({
-        "message": "Note pinned",
-        "note": note.to_dict()
-    }), 200
-
-@note.route('/unPin/<id>', methods=['PUT'])
-@token_required
-def unpin(id):
-    note = NoteServices.unpin_note_by_id(id)
-    return jsonify({
-        "message": "Note unpinned",
-        "note": note.to_dict()
-    }), 200
 
 @note.route('/pinned', methods=['GET'])
 @token_required

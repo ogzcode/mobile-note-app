@@ -23,10 +23,11 @@ class NoteServices:
         return Note.query.filter_by(id=id).first()
 
     @staticmethod
-    def update_note_by_id(id, title, content):
+    def update_note_by_id(id, title, content, isPin):
         note = Note.query.filter_by(id=id).first()
         note.title = title
         note.content = content
+        note.isPinned = isPin
         db.session.commit()
         return note
 
@@ -34,20 +35,6 @@ class NoteServices:
     def delete_note_by_id(id):
         note = Note.query.filter_by(id=id).first()
         db.session.delete(note)
-        db.session.commit()
-        return note
-
-    @staticmethod
-    def pin_note_by_id(id):
-        note = Note.query.filter_by(id=id).first()
-        note.isPinned = True
-        db.session.commit()
-        return note
-
-    @staticmethod
-    def unpin_note_by_id(id):
-        note = Note.query.filter_by(id=id).first()
-        note.isPinned = False
         db.session.commit()
         return note
 

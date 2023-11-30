@@ -12,6 +12,8 @@ Projenin yerel ortamınıza başarıyla kurulumu için aşağıdaki adımları i
 - Node.js
 - npm veya yarn
 - Expo (React Native projeleri için)
+- Android Emulator
+- Pixel 4 API 31 de test edildi.
 
 ### Kurulum
 
@@ -26,7 +28,7 @@ Projenin yerel ortamınıza başarıyla kurulumu için aşağıdaki adımları i
    ```
    cd react-native-note
    npm install
-   npx expo start --web
+   npm run android
    ```
 
 #### Kullanım

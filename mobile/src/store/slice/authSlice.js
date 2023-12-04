@@ -19,11 +19,9 @@ export const loginAsync = createAsyncThunk("auth/login", async (data, { rejectWi
 export const registerAsync = createAsyncThunk("auth/register", async (data, { rejectWithValue }) => {
     try {
         const response = await register(data);
-        console.log("register response", response);
         return response.data;
     } 
     catch (error) {
-        console.log("register error", error);
         return rejectWithValue(error.response.data);
     }
 });
@@ -120,7 +118,6 @@ const authSlice = createSlice({
             .addCase(registerAsync.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload.message;
-                console.log("register message", action.payload.message);
             })
             .addCase(deleteAccountAsync.pending, (state) => {
                 state.isLoading = true;

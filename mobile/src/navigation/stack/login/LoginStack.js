@@ -23,7 +23,6 @@ export default function LoginStack() {
         <Stack.Navigator
             initialRouteName={firstLogin ? "Pin" : "Welcome"}
             screenOptions={{
-                gestureEnabled: false,
                 headerShown: false
             }}>
             <Stack.Screen name="Welcome" component={Welcome} />

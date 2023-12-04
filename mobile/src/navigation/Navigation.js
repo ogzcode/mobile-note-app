@@ -64,7 +64,6 @@ export default function Navigation() {
     return (
         <NavigationContainer>
             <Stack.Navigator screenOptions={{
-                gestureEnabled: false,
                 headerShown: false
             }}>
                 {

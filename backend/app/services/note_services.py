@@ -53,3 +53,11 @@ class NoteServices:
             db.session.delete(note)
         db.session.commit()
         return notes
+    
+    @staticmethod
+    def delete_notes_by_user_id(user_id):
+        notes = Note.query.filter_by(user_id=user_id).all()
+        for note in notes:
+            db.session.delete(note)
+        db.session.commit()
+        return notes

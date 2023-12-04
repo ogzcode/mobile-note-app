@@ -6,6 +6,7 @@ from flask import jsonify, Blueprint, request, g
 from app.middlewares.auth import token_required, role_required
 
 from app.services import UserServices
+from app.services import NoteServices
 
 user = Blueprint('user', __name__, url_prefix='/user')
 
@@ -22,7 +23,9 @@ def get_user():
 @user.route('/deleteUser', methods=['DELETE'])
 @token_required
 def delete_user():
+    user = UserServices.get_user(g.email)
     UserServices.delete_user_by_email(g.email)
+    NoteServices.delete_notes_by_user_id(user.id)
     return jsonify({'message': 'User deleted successfully'}), 200
 
 

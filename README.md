@@ -35,3 +35,8 @@ Projenin yerel ortamınıza başarıyla kurulumu için aşağıdaki adımları i
 * Uygulamayı başlattıktan sonra, notlarınızı ekleyebilir, düzenleyebilir ve silebilirsiniz.
 * Her bir notun başlık ve içerik bilgileri bulunmaktadır.
 * Uygulama, Flask tarafındaki basit bir API kullanarak notları yönetir.
+
+
+#### Preview Video
+https://github.com/ogzcode/mobile-note-app/assets/58819819/114c8ce6-a000-4473-915b-652c8ba878e2
+

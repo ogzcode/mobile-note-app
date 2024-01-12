@@ -1,13 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { View, Text, Pressable, TextInput } from 'react-native';
-
+import { View, Text, Pressable, TextInput, StyleSheet } from 'react-native';
 import Password from "../../assets/SvgComponent/PasswordSVG";
-
+import { removeToken, removeFirstLogin, removeUserEmail } from '../../services/storageServices';
 import { loginAsync, registerAsync, clearStatus, clearError } from '../../store/slice/authSlice';
 import { useToast } from '../../components/toast/useToast';
 
 import { BaseStyle, InputStyle } from './style/BaseStyle';
+
+import { AntDesign } from '@expo/vector-icons';
+
+import { slate } from '../../style/color';
+
+const styles = StyleSheet.create({
+    backBtn: {
+        position: 'absolute',
+        top: 20,
+        left: 20,
+        zIndex: 1,
+    }
+});
 
 export default function Pin({ navigation }) {
     const { firstLogin, userEmail, isLoading, error, status } = useSelector(state => state.auth);
@@ -20,7 +32,7 @@ export default function Pin({ navigation }) {
     useEffect(() => {
         if (status === "success") {
             showToast("Login success", "success");
-            navigation.navigate("BottomTabStack");
+            //navigation.navigate("BottomTabStack");
         }
     }, [status]);
 
@@ -52,8 +64,15 @@ export default function Pin({ navigation }) {
         return false;
     }
 
+    const handleBack = () => {
+        navigation.navigate("Email");
+    }
+
     return (
         <View style={BaseStyle.container}>
+            <Pressable onPress={() => handleBack()} style={styles.backBtn}>
+                <AntDesign name="left" size={24} color={slate[500]} />
+            </Pressable>
             <Password width={300} height={200} />
             <View style={BaseStyle.contentBox}>
                 <Text style={BaseStyle.text}>Enter your PIN</Text>

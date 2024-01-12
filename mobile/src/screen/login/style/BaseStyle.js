@@ -12,7 +12,8 @@ export const BaseStyle = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        position: 'relative',
     },
     contentBox: {
         alignItems: 'center',
@@ -57,7 +58,7 @@ export const InputStyle = StyleSheet.create({
         borderColor: sky[500],
         borderRadius: radius["md"],
         paddingHorizontal: spacing["4"],
-        color: slate[500],
+        color: slate[600],
         fontSize: fontSize["base"],
     },
     pinInput: {

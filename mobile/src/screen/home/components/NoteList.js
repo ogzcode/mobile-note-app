@@ -85,6 +85,17 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: yellow[500],
         borderRadius: radius['full'],
+    },
+    noDataText: {
+        textAlign: 'center',
+        marginTop: spacing['6'],
+        backgroundColor: "white",
+        marginHorizontal: spacing['6'],
+        padding: spacing['4'],
+        borderRadius: radius['md'],
+        color: slate[700],
+        fontSize: fontSize['lg'],
+        fontWeight: fontWeight['medium'],
     }
 });
 
@@ -132,6 +143,10 @@ export default function NoteList({ onSelectItem }) {
                         <View style={styles.leftBar}></View>
                     </Pressable>
                 ))
+            }
+            {
+                filterNotes.length === 0 && 
+                <Text style={styles.noDataText}>No notes</Text>
             }
         </ScrollView>
     );

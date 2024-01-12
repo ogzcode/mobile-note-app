@@ -14,44 +14,56 @@ user = Blueprint('user', __name__, url_prefix='/user')
 @user.route('/getUserByEmail', methods=['GET'])
 @token_required
 def get_user():
-    user = UserServices.get_user(g.email)
-    return jsonify({
-        "user": user.to_dict()
-    }), 200
+    try:
+        user = UserServices.get_user(g.email)
+        return jsonify({
+            "user": user.to_dict()
+        }), 200
+    except:
+        return jsonify({'message': 'User not found'}), 400
 
 
 @user.route('/deleteUser', methods=['DELETE'])
 @token_required
 def delete_user():
-    user = UserServices.get_user(g.email)
-    UserServices.delete_user_by_email(g.email)
-    NoteServices.delete_notes_by_user_id(user.id)
-    return jsonify({'message': 'User deleted successfully'}), 200
+    try:
+        user = UserServices.get_user(g.email)
+        UserServices.delete_user_by_email(g.email)
+        NoteServices.delete_notes_by_user_id(user.id)
+        return jsonify({'message': 'User deleted successfully'}), 200
+    except:
+        return jsonify({'message': 'User not found'}), 400
 
 
 @user.route('/all', methods=['DELETE'])
 @token_required
 @role_required('admin')
 def delete_all_users():
-    UserServices.delete_all_users()
-    return jsonify({'message': 'All users deleted successfully'}), 200
+    try:
+        UserServices.delete_all_users()
+        return jsonify({'message': 'All users deleted successfully'}), 200
+    except:
+        return jsonify({'message': 'Error deleting users'}), 400
 
 
 @user.route('/updateUser', methods=['PUT'])
 @token_required
 def update_user():
-    data = request.get_json()
+    try:
+        data = request.get_json()
 
-    if "email" not in data or "pin" not in data:
-        return jsonify({'message': 'Invalid credentials'}), 422
+        if "email" not in data or "pin" not in data:
+            return jsonify({'message': 'Invalid credentials'}), 422
 
 
-    user = UserServices.update_user(data["oldEmail"], data['email'], data['pin'])
+        user = UserServices.update_user(data["oldEmail"], data['email'], data['pin'])
 
-    return jsonify({
-        "message": "User updated successfully",
-        "user": user.to_dict()
-    }), 200
+        return jsonify({
+            "message": "User updated successfully",
+            "user": user.to_dict()
+        }), 200
+    except:
+        return jsonify({'message': 'User not found'}), 400
 
 
 @user.route('/login', methods=['POST'])

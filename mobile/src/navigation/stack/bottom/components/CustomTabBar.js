@@ -50,7 +50,7 @@ const getTabBarIcon = (routeName) => {
         iconData.color = slate[700];
     } else if (routeName === 'AddNote') {
         iconData.name = 'pluscircle';
-        iconData.size = size["8"];
+        iconData.size = size["10"];
         iconData.color = sky[500];
     } else if (routeName === 'Settings') {
         iconData.name = 'setting';

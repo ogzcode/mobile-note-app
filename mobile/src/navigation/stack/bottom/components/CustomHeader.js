@@ -48,7 +48,9 @@ const styles = StyleSheet.create({
     },
     searchInput: {
         width: '100%',
-        color: slate[500],
+        color: slate[700],
+        fontSize: fontSize['base'],
+        letterSpacing: .8,
     },
 });
 

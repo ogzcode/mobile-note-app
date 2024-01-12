@@ -21,23 +21,23 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
     },
     deleteBtn: {
-        width: 36,
-        height: 36,
+        width: 40,
+        height: 40,
         borderRadius: radius["full"],
         justifyContent: 'center',
         alignItems: 'center',
         borderColor: red[500],
-        borderWidth: 1,
+        borderWidth: 2,
         backgroundColor: "#fff",
     },
     backBtn: {
-        width: 36,
-        height: 36,
+        width: 40,
+        height: 40,
         borderRadius: radius["full"],
         justifyContent: 'center',
         alignItems: 'center',
         borderColor: slate[500],
-        borderWidth: 1,
+        borderWidth: 2,
         backgroundColor: "#fff",
     }
 });
@@ -59,10 +59,10 @@ export const ModalHeader = ({ onClose }) => {
     return (
         <View style={styles.modalHeader}>
             <Pressable onPress={() => handleClose()} style={styles.backBtn}>
-                <AntDesign name="left" size={18} color={slate[500]} />
+                <AntDesign name="left" size={20} color={slate[500]} />
             </Pressable>
             <Pressable onPress={() => handleDelete()} style={styles.deleteBtn}>
-                <AntDesign name="delete" size={18} color={red[500]} />
+                <AntDesign name="delete" size={20} color={red[500]} />
             </Pressable>
         </View>
     )

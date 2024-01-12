@@ -45,7 +45,6 @@ export default function DeleteCard() {
 
     const handleDeleteAccount = async () => {
         const res = await dispatch(deleteAccountAsync());
-
         if (res.meta.requestStatus === "fulfilled") {
             setPopupVisible(false);
             showToast(res.payload.message, "success");
@@ -57,7 +56,7 @@ export default function DeleteCard() {
     }
 
     return (
-        <View style={BaseStyle.card}>
+        <View style={[BaseStyle.card, { marginBottom: spacing['6']}]}>
             <View style={BaseStyle.cardHeader}>
                 <Text style={BaseStyle.headerTitle}>Delete Account</Text>
                 <Text style={BaseStyle.headerContent}>

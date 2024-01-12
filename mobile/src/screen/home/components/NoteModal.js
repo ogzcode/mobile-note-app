@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: "500",
         color: slate[700],
-        textAlign: 'center',
         marginBottom: 8,
     },
     time: {
@@ -52,12 +51,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8,
     },
     pinnedBtn: {
-        width: 36,
-        height: 36,
+        width: 40,
+        height: 40,
         borderRadius: radius["full"],
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 1,
+        borderWidth: 2,
     },
     activePin: {
         borderColor: yellow[500],
@@ -93,7 +92,7 @@ export default function NoteModal({ visible, onClose }) {
                     <View style={styles.contentBoxHeader}>
                         <Text style={styles.time}>{getDateToDot(selectedNote.createdAt)}</Text>
                         <Pressable onPress={() => handlePin()} style={[styles.pinnedBtn, selectedNote?.isPinned ? styles.activePin : styles.deactivePin ]}>
-                            <AntDesign name="pushpino" size={18} color={selectedNote?.isPinned ? "#fff" : slate[500]} />
+                            <AntDesign name="pushpino" size={20} color={selectedNote?.isPinned ? "#fff" : slate[500]} />
                         </Pressable>
                     </View>
                     <Text style={styles.name}>{ selectedNote?.title }</Text>
